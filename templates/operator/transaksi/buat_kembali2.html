@@ -1,0 +1,125 @@
+{% extends 'operator/base/base.html' %}
+
+{% block title %}Pinjam barang{% endblock title %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-5">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">Pinjam Barang</strong>
+                        </div>
+                        <div class="card-body">
+                            <!-- Credit Card -->
+                                <div class="card-body">
+                                    <form action="" method="post" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <label for="jumlah" class="control-label mb-1">NIP Peminjam</label>
+                                            <input type="text" name="nip_peminjam" value="{{nip_peminjam}}" class="form-control" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="jumlah" class="control-label mb-1">Nama Peminjam</label>
+                                            <input type="text" name="nama_peminjam" value="{{peminjam}}" class="form-control" readonly>
+                                        </div>
+                                    </form>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">Daftar Barang</strong>
+                        </div>
+                        <div class="card-body">
+                            <table class="table" id="coba" style="font-size: 12px;">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Kode peminjaman</th>
+                                        <th>Kode barang</th>
+                                        <th>Nama barang</th>
+                                  </tr>
+                                </thead>
+                              <tbody>
+                                {% for keran in hasil %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{keran.kode_pinjam}}</td>
+                                    <td>{{keran.id_barang}}</td>
+                                    <td>{{keran.nama_barang}}</td>
+                                    <td>
+                                        <a href="" class="btn btn-outline-primary" data-toggle="modal" data-target="#staticModal{{keran.id}}" ><i class="fa fa-undo"></i></a>
+                                    </td>
+                                    <div class="modal fade" id="staticModal{{keran.id}}" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticModalLabel">Pengembalian Barangg</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <aside class="profile-nav alt">
+                                                        <section class="card">
+                                                            <div class="card-body">
+                                                                <form action="{% url 'pengembalian2' %}" method="post" enctype="multipart/form-data">
+                                                                    {% csrf_token %}
+                                                                    <div class="form-group">
+                                                                        <label for="jumlah" class="control-label mb-1">NIP Pengembali</label>
+                                                                        <input type="text" name="nip_pengembali" id="search" value="{{keran.nip_peminjam}}" class="form-control" autocomplete="off" readonly>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="jumlah" class="control-label mb-1">Nama Barang</label>
+                                                                        <input type="text" class="form-control" name="nama_barang" id="nama_barang" value="{{keran.nama_barang}}" readonly>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="keterangan" class="control-label mb-1">keterangan</label>
+                                                                        <textarea name="keterangan" id="keterangan" rows="4" class="form-control">-</textarea>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <input type="text" name="nama_pengembali" id="nama" value="{{keran.nama_peminjam}}" class="form-control" autocomplete="off" hidden>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <input type="text" class="form-control" name="id_transaksi" id="id_transaksi" value="{{keran.id}}" hidden>
+                                                                    </div>
+                                                                    
+                                                                    <div class="form-group">
+                                                                        <input type="text" class="form-control" name="id_barang" id="id_barang" value="{{keran.id_barang}}" hidden>
+                                                                    </div>
+                                                                    <input type="text" name="kode_pinjam" value="{{keran.kode_pinjam}}" hidden>
+                                                                    <input type="text" class="form-control" name="nama_op" id="nama_op" value="{{User}}" hidden>
+                                                                    <input type="text" name="status_peminjaman" value="Dikembalikan" hidden>
+                                                                    <input type="text" name="status" value="Tersedia" hidden>
+                                                                    <input type="text" name="status_pengembalian" value="Dikembalikan" hidden>
+                                                                    <div>
+                                                                        <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
+                                                                            <span id="payment-button-amount"><i class="fa fa-undo"></i> Kembalikan</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </section>
+                                                    </aside>
+                                                </div>
+                                        </div>
+                                    </div>
+
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            
+            <div class="card-body"></div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

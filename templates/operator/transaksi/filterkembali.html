@@ -1,0 +1,95 @@
+{% extends 'operator/base/base.html' %}
+
+{% block title %}Product List{% endblock title %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row m-0">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Laporan</a></li>
+                            <li class="active">List Pengembalian</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock breadcrumbs %}
+
+
+
+{% block content %}
+
+<form action="{%url 'c_f_pengembalian'%}" method="GET">
+    {% csrf_token %}
+    <div class="row form-group">
+            <input type="hidden" name="tanggal1" class="form-control col col-sm-2 ml-3 mr-3" value="{{dari}}">
+            <input type="hidden" name="tanggal2" class="form-control col col-sm-2 ml-3 mr" value="{{sampai}}">
+            <button type="submit" class="btn btn-primary ml-3"><i class="fa fa-print"></i> Cetak Data </button>
+    </div>
+</form>
+
+<div class="row mt-3">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="box-title">List Peminjaman</h4>
+            </div>
+            <div class="card-body--">
+                <div class="table-stats order-table ov-h">
+                    <table class="table " id="coba">
+                        <thead>
+                            <tr>
+                                <th class="serial">No</th>
+                                <th>Nip peminjam</th>
+                                <th>Nama peminjam</th>
+                                <th>Kode peminjaman</th>
+                                <th>Nama barang</th>
+                                <th>Status</th>
+                                <th>Tanggal pinjam</th>
+                                <th class="serial">#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for kembali in hasil %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{ kembali.nip_pengembali }}</td>
+                                <td>{{ kembali.nama_pengembali }}</td>
+                                <td>{{kembali.kode_pinjam }}</td>
+                                <td>{{ kembali.nama_barang }}</td>
+                                <td>
+                                    {% if kembali.status_pengembalian == "Dikembalikan" %}
+                                    <span class="badge badge-complete">Di kembalikan</span>
+                                    {% else %}
+                                    <span class="badge badge-dark">Tidak DI Ketahui</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ kembali.tanggal_kembali }}</td>
+                                <td>
+                                </td>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div> <!-- /.table-stats -->
+                </div> <!-- /.table-stats -->
+            </div>
+        </div> <!-- /.card -->
+    </div>  <!-- /.col-lg-8 -->
+
+    
+</div>
+{% endblock content %}

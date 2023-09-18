@@ -1,0 +1,342 @@
+{% extends 'operator/base/base.html' %}
+
+{% block title %}List Pegawai{% endblock title %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row m-0">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li><a href="{%url 'index'%}">Dashboard</a></li>
+                            <li><a href="">Pegawai</a></li>
+                            <li class="active">List</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if messages %}
+    {% for message in messages %}
+      {% if message.tags == "error"%}
+      <div class="breadcrumbs">
+        <div class="alert alert-danger" role="alert">
+            {{message}}
+        </div>
+    </div>
+      {% else %}
+      <div class="breadcrumbs">
+        <div class="alert alert-success" role="alert">
+            {{message}}
+        </div>
+    </div>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endblock breadcrumbs %}
+
+
+
+{% block content %}
+<div class="card-body">
+<a class="btn btn-info" data-toggle="modal" data-target="#tambah" role="button" style="color: aliceblue;">Tambah</a>
+<!-- <a class="btn btn-info" href="{%url 'tambahpegawai'%}" role="button">Tambah Data</a> -->
+<a class="btn btn-outline-secondary" href="{%url 'c_pegawai'%}" target='_blank' role="button"><i class="fa fa-print"> Cetak</i></a>
+<!-- 
+<a data-toggle="modal" data-target="#Modalexport"
+                        class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
+                            class="fas fa-print fa-sm text-white-50"></i> Import Data</a> -->
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="box-title">List Pegawai</h4>
+            </div>
+            <div class="card-body--" style="overflow: auto;">
+                <div class="table-stats order-table ov-h">
+                    <table class="table " id="coba">
+                        <thead>
+                            <tr>
+                                <th class="serial">#</th>
+                                <th>Nama</th>
+                                <th>NIP</th>
+                                <th>Pangkat/Golongan</th>
+                                <th>Jabatan</th>
+                                <th class="serial">#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for karyawan in semua_pegawai %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{ karyawan.nama }}</td>
+                                <td>{{ karyawan.nip }}</td>
+                                <td>
+                                    {{karyawan.pangkat_atau_golongan}}
+                                </td>
+
+                                <td>{% if karyawan.jabatan == 'Kepala sekolah' %}
+                                    <span class="badge badge-secondary">Kepala Sekolah</span>
+                                    {% elif karyawan.jabatan == 'Wakabid Kurikulum' %}
+                                    <span class="badge badge-complete">Wakabid Kurikulum</span>
+                                    {% elif karyawan.jabatan == 'Wakabid Sarana Prasarana' %}
+                                    <span class="badge badge-complete">Wakabid Sarana Prasarana</span>
+                                    {% elif karyawan.jabatan == 'Wakabid Kesiswaan' %}
+                                    <span class="badge badge-complete">Wakabid kesiswaan</span>
+                                    {% elif karyawan.jabatan == 'Wakabid humas' %}
+                                    <span class="badge badge-complete">Wakabid humas</span>
+                                    {% elif karyawan.jabatan == 'Kepala Tata Usaha' %}
+                                    <span class="badge badge-complete">Kepala Tata Usaha</span>
+                                    {% elif karyawan.jabatan == 'Fungsional Guru' %}
+                                    <span class="badge badge-success">Fungsional Guru</span>
+                                    {% elif karyawan.jabatan == 'Fungsional Umum' %}
+                                    <span class="badge badge-pending">Fungsional Umum</span>
+                                    {% else %}
+                                    <span class="badge badge-dark">Data kosong </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="" button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#staticModal{{karyawan.id}}"><i class="fa fa-info-circle" aria-hidden="true"></i></button></a>
+                                    <a href href="" button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#tesModal{{karyawan.id}}"><i class="fa fa-edit"></i></button></a>
+                                    <a href="" button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cobaModal{{karyawan.id}}"><i class="fa fa-trash"></i></button></a>
+                                    
+                                    <div class="modal fade" id="cobaModal{{karyawan.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <form action="{% url 'hapus_pegawai' karyawan.id %}" method="POST">
+                                                {% csrf_token %}
+                                            <div class="modal-body">
+                                                <h5 style="text-align:center; font-size:20px;" > Apakah anda yakin ingin menghapus data ini ?</h5>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn" data-dismiss="modal">Batal</button>
+                                              <button type="submit" class="btn btn-danger">Hapus</button>
+                                            </div>
+                                            </form>
+                                          </div>
+                                        </div>
+                                    </div>
+                                
+                                </td>  
+
+                                <div class="modal fade" id="staticModal{{karyawan.id}}" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticModalLabel">Detail Pegawai</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <aside class="profile-nav alt">
+                                                    <section class="card">
+                                                        <div class="card-header user-header alt bg-dark">
+                                                            <div class="media">
+                                                                <a href="#">
+                                                                    <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" src="{{ karyawan.Foto.url }}">
+                                                                </a>
+                                                                <div class="media-body">
+                                                                    <h2 class="text-light display-6">{{ karyawan.nama }}</h2>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <ul class="list-group list-group-flush">
+                                                            <li class="list-group-item">
+                                                               <p>Nip : {{karyawan.nip}}</p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <p>Pangkat Atau Golongan : {{karyawan.pangkat_atau_golongan}} </p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <p>Jabatan : {{karyawan.jabatan}}<p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <p>Tanggal terdaftar : {{karyawan.tanggal_terdaftar}}</p>
+                                                            </li>
+                                                        </ul>
+                                            
+                                                    </section>
+                                                </aside>
+                                           </div>
+                                           <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tr>
+                            <div class="modal fade" id="tesModal{{karyawan.id}}" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticModalLabel">Edit Pegawai</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <aside class="profile-nav alt">
+                                                <section class="card">
+                                                    <div class="card-body">
+                                                        <!-- Credit Card -->
+                                                            <div class="card-body">
+                                                                <form method="post" action="{%url 'edit_pegawai' karyawan.id%}" enctype="multipart/form-data">
+                                                                    {% csrf_token %}
+                                                                    <div class="form-group">
+                                                                        <label for="nama" class="control-label mb-1">Nama Karyawan</label>
+                                                                        <input type="text" class="form-control" name="nama" id="nama" value ="{{karyawan.nama}}" autocomplete="off" >
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="jenis" class="control-label mb-1">NIP</label>
+                                                                        <input type="text" class="form-control" name="nip" id="nip" value="{{karyawan.nip}}" autocomplete="off">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="jenis" class="control-label mb-1">Golonngan Atau Jabatan</label>
+                                                                        <input type="text" class="form-control" name="pangkat_atau_golongan" id="pangkat_atau_golongan" value="{{karyawan.pangkat_atau_golongan}}" autocomplete="off">
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="jumlah" class="control-label mb-1">Jabatan</label>
+                                                                        <select name="jabatan" id="jabatan" class="form-control">
+                                                                            <option value="{{karyawan.jabatan}}">--Pilih Jabatan--</option>
+                                                                            <option value="Fungsional Guru">Fungsional Guru</option>
+                                                                            <option value="Fungsional Umum">Fungsional Umum</option>
+                                                                            <option value="Kepala sekolah">Kepala sekolah</option>
+                                                                            <option value="Wakabid Kurikulum">Wakabid Kurikulum</option>
+                                                                            <option value="Wakabid humas">Wakabid humas</option>
+                                                                            <option value="Wakabid Sarana Prasarana">Wakabid Sarana Prasarana</option>
+                                                                            <option value="Wakabid kesiswaan">Wakabid kesiswaan</option>
+                                                                            <option value="Kepala Tata Usaha">Kepala Tata Usaha</option>
+                                                                        </select>
+                                                                    </div>
+                                        
+                                                                    
+                                                                    <div class class="form-group">
+                                                                        <label for="Foto" class="control-label mb-1">Upload Foto</label></div>
+                                                                        <input type="file" id="Foto" name="Foto" class="form-control-file" value="karyawan.Foto">
+                                                                    </div>
+                                                                    <div>
+                                                                        <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
+                                                                            <span id="payment-button-amount">Simpan</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                        
+                                                    </div>
+                                                </section>
+                                            </aside>
+                                       </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div> <!-- /.card -->
+    </div>  <!-- /.col-lg-8 -->
+</div>
+
+<div class="modal fade" id="Modalexport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true"></button>
+                <h4 class="modal-title" id="myModalLabel">Import data</h4>
+            </div>
+            <form class="form-horizontal" action="{% url 'simple_upload' %}" method="post"
+                enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">Pilih file</label>
+                        <div class="col-sm-7">
+                            <input type="file" name="myfile" class="form-control" id="inputEmail3" required>
+                        </div>
+                    </div>
+                </div>
+                <div class=" modal-footer">
+                    <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary btn-flat" id="simpan">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tambah" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Tambah Pegawai</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="nama" class="control-label mb-1">Nama Pegawai</label>
+                    <input type="text" class="form-control" name="nama" id="nama" autocomplete="off" required>
+                    {% for err in form.nama.errors %}
+                        <small class="text-danger">{{err}}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="jenis" class="control-label mb-1">NIP</label>
+                    <input type="number" class="form-control" name="nip" id="nip" autocomplete="off" min="0" maxlength="18" required>
+                    {% for err in form.nip.errors %}
+                        <small class="text-danger">{{err}}</small>
+                    {% endfor %}
+                </div>
+                <div class="form-group">
+                    <label for="jenis" class="control-label mb-1">Golonngan Atau Jabatan</label>
+                    <input type="text" class="form-control" name="pangkat_atau_golongan" id="pangkat_atau_golongan" autocomplete="off" required>
+                </div>
+                <div class="form-group">
+                    <label for="jumlah" class="control-label mb-1">Jabatan</label>
+                    <select name="jabatan" id="jabatan" class="form-control" required>
+                        <option value="">--Pilih Jabatan--</option>
+                        <option value="Fungsional Guru">Fungsional Guru</option>
+                        <option value="Fungsional Umum">Fungsional Umum</option>
+                        <option value="Kepala sekolah">Kepala sekolah</option>
+                        <option value="Wakabid Kurikulum">Wakabid Kurikulum</option>
+                        <option value="Wakabid humas">Wakabid humas</option>
+                        <option value="Wakabid Sarana Prasarana">Wakabid Sarana Prasarana</option>
+                        <option value="Wakabid kesiswaan">Wakabid kesiswaan</option>
+                        <option value="Kepala Tata Usaha">Kepala Tata Usaha</option>
+                    </select>
+                </div>
+                <div class class="form-group">
+                    <label for="Foto" class="control-label mb-1">Upload Foto</label></div>
+                    <input type="file" id="Foto" name="Foto" class="form-control-file">
+                </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

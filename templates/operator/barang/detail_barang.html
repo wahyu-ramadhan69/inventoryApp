@@ -1,0 +1,59 @@
+{% extends 'operator/base/base.html' %}
+
+{% block title %}Detail Barang{% endblock title %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row m-0">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Barang</a></li>
+                            <li class="active">Detail</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if messages %}
+{%for message in messages%}
+<div class="breadcrumbs">
+    <div class="alert alert-success" role="alert">
+        {{message}}
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock breadcrumbs %}
+
+
+
+{% block content %}
+<div class="col-md-4">
+    <div class="card">
+        <img class="card-img-top" src="{{ Barang.Foto.url }}" alt="Card image cap">
+        <div class="card-body">
+            <h2 class="card-title mb-3">{{ Barang.nama }} {{ Barang.id }}</h2>
+            <h4 class="card-title mb-1">Merk&ensp;: {{ Barang.merk }}</h4>
+            {% if Barang.status == '1' %}
+                Status : <span class="badge badge-dark">Di pinjam</span>
+            {% else %}
+                Status  : <span class="badge badge-secondary">Tersedia</span>
+            {% endif %}
+            <p class="card-text mt-1">{{ Barang.keterangan }}</p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

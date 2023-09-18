@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Sientis--Sistem informasi inventaris</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- MATERIAL DESIGN ICONIC FONT -->
+		<link rel="stylesheet" href="{% static 'fonts/material-design-iconic-font/css/material-design-iconic-font.min.css' %}">
+		
+		<!-- STYLE CSS -->
+		<link rel="stylesheet" href="{% static 'login/lupa.css'%}">
+	</head>
+
+	<body>
+		
+		<header>
+			<img src="{%static 'images/logo_2.png'%}" width="200px" class="logo"></img>
+			<ul>
+				<li><a href="{%url 'index'%}">Home</a></li>
+				<li><a href="http://man1modelbengkulu.sch.id/">Man 1 Kota Bengkulu.sch.id</a></li>
+			</ul>
+		</header>
+
+		<div class="wrapper">
+			<div class="inner">
+				<form method="POST">
+          {% csrf_token %}
+					<h3>Ubah Password</h3>
+					<p>Silahkan masukkan password baru</p>
+					<label class="form-group">
+						<input type="password" name="new_password1" class="form-control" required id="id_new_passwor1" autocomplete="off">
+						<span for="">Password</span>
+						<span class="border"></span>
+						{% for err in form.new_password1.errors %}
+                            <small class="text-danger">{{err}}</small>
+                        {% endfor %}
+					</label>
+					<label class="form-group">
+						<input type="password" name="new_password2" class="form-control" required id="id_new_password2" autocomplete="off">
+						<span for="">Ulangi Password</span>
+						<span class="border"></span>
+						{% for err in form.new_password2.errors %}
+                            <small class="text-danger">{{err}}</small>
+                        {% endfor %}
+					</label>
+					<button type="submit" value="Change my password">Konfirmasi
+					</button>
+				</form>
+			</div>
+		</div>
+		
+	</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>

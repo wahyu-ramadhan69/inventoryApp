@@ -1,0 +1,171 @@
+{% extends 'admin/base/base.html' %}
+
+{% block title %}List Karyawan{% endblock title %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row m-0">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li><a href="{%url 'index'%}">Dashboard</a></li>
+                            <li><a href="{%url 'pegawai_admin'%}">pegawai</a></li>
+                            <li class="active">List</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if messages %}
+{%for message in messages%}
+<div class="breadcrumbs">
+    <div class="alert alert-success" role="alert">
+        {{message}}
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock breadcrumbs %}
+
+
+
+{% block content %}
+<div class="card-body">
+    <form action="{%url 'c_pegawai'%}" method="GET" target='_blank' enctype="multipart/form-data">
+        <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-print"></i> Cetak</button>
+    </form>
+
+    <!-- <form action="{%url 'cetak_pegawai_ex'%}" method="GET" target='_blank' enctype="multipart/form-data">
+        <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-print"></i> Cetak ex</button>
+    </form> -->
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="box-title">List Pegawai</h4>
+            </div>
+            <div class="card-body--">
+                <div class="table-stats order-table ov-h">
+                    <table class="table " id="coba">
+                        <thead>
+                            <tr>
+                                <th class="serial">#</th>
+                                <th>Nama</th>
+                                <th>NIP</th>
+                                <th>Pangkat</th>
+                                <th>Golongan</th>
+                                <th>Jabatan</th>
+                                <th class="serial">#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for karyawan in semua_pegawai %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{ karyawan.nama }}</td>
+                                <td>{{ karyawan.nip }}</td>
+                                <td>
+                                    {{karyawan.pangkat}}
+                                </td>
+                                <td>
+                                    {{karyawan.golongan}}
+                                </td>
+
+                                <td>
+                                    {% if karyawan.jabatan == 'Kepala sekolah' %}
+                                    <span class="badge badge-secondary">Kepala Sekolah</span>
+                                    {% elif karyawan.jabatan == 'Wakabid Kurikulum' %}
+                                    <span class="badge badge-complete">Wakabid Kurikulum</span>
+                                    {% elif karyawan.jabatan == 'Wakabid Sarana Prasarana' %}
+                                    <span class="badge badge-complete">Wakabid Sarana Prasarana</span>
+                                    {% elif karyawan.jabatan == 'Wakabid kesiswaan' %}
+                                    <span class="badge badge-complete">Wakabid kesiswaan</span>
+                                    {% elif karyawan.jabatan == 'Wakabid humas' %}
+                                    <span class="badge badge-complete">Wakabid humas</span>
+                                    {% elif karyawan.jabatan == 'Kepala Tata Usaha' %}
+                                    <span class="badge badge-complete">Kepala Tata Usaha</span>
+                                    {% elif karyawan.jabatan == 'Fungsional Guru' %}
+                                    <span class="badge badge-success">Fungsional Guru</span>
+                                    {% elif karyawan.jabatan == 'Fungsional Umum' %}
+                                    <span class="badge badge-pending">Fungsional Umum</span>
+                                    {% else %}
+                                    <span class="badge badge-dark">Data kosong </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="" button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#staticModal{{karyawan.id}}"><i class="fa fa-info-circle" aria-hidden="true"></i></button></a>
+                                </td>
+                                <div class="modal fade" id="staticModal{{karyawan.id}}" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticModalLabel">Detail Pegawai</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <aside class="profile-nav alt">
+                                                    <section class="card">
+                                                        <div class="card-header user-header alt bg-dark">
+                                                            <div class="media">
+                                                                <a href="#">
+                                                                    <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" src="{{ karyawan.Foto.url }}">
+                                                                </a>
+                                                                <div class="media-body">
+                                                                    <h2 class="text-light display-6">{{ karyawan.nama }}</h2>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <ul class="list-group list-group-flush">
+                                                            <li class="list-group-item">
+                                                               <p>Nip : {{karyawan.nip}}</p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <p>Pangkat : {{karyawan.pangkat}} </p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <p>Golongan : {{karyawan.golongan}} </p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <p>Jabatan : {{karyawan.jabatan}}<p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <p>Tanggal terdaftar : {{karyawan.tanggal_terdaftar}}</p>
+                                                            </li>
+                                                        </ul>
+                                            
+                                                    </section>
+                                                </aside>
+                                           </div>
+                                           <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div> <!-- /.table-stats -->
+            </div>
+        </div> <!-- /.card -->
+    </div>  <!-- /.col-lg-8 -->
+
+    
+</div>
+{% endblock content %}

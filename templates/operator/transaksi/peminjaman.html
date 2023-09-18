@@ -1,0 +1,113 @@
+{% extends 'operator/base/base.html' %}
+
+{% block title %}Create Buyer{% endblock title %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <strong class="card-title">Masukkan Nama Barang</strong>
+            </div>
+            <div class="card-body">
+                    <div class="card-body">
+                        <div class="search-box">
+                            <form action="{%url 'peminjaman'%}" method="GET">
+                                <div class="search__container">
+                                    <input class="search__input" type="text" placeholder="Cari barang" name="keyword" autocomplete="off">
+                                    <button type="submit" hidden></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            </div>
+        </div> 
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="card">
+                        <div class="table">
+                            <table class="table" id="pinjam" style="font-size: 12px;">
+                                <thead>
+                                    <tr>
+                                        <th class="serial">#</th>
+                                        <th>Kode</th>
+                                        <th>Nama</th>
+                                        <th>Merk</th>
+                                        <th>Keterangan</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for barang in hasil %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{barang.kode}}</td>
+                                        <td>{{ barang.nama }}</td>
+                                        <td>{{ barang.merk }}</td>
+                                        <td>{{barang.keterangan}}</td>
+                                        <td>
+                                            <form action="" method="post" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <input type="text" name="barang" value="{{ barang.id }}" hidden>
+                                                <input type="text" name="user" value="{{ User }}" hidden>
+                                                <input type="text" name="status" value="Dipinjam" hidden>
+                                                <button type="submit"  class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Pinjam barang</button> 
+                                            </form>
+                                        </td>
+                                        
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div> <!-- /.table-stats -->
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table" style="font-size: 12px;">
+                                <thead>
+                                    <tr>
+                                        <th class="serial">#</th>
+                                        <th>Nama</th>
+                                        <th>Merk</th>
+                                        <th>Jenis</th>
+                                        <th>Aksi</th>
+                                  </tr>
+                                </thead>
+                              <tbody>
+                                {% for keran in Keranjang %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{keran.barang.nama}}</td>
+                                    <td>{{keran.barang.merk}}</td>
+                                    <td>{{keran.barang.kode}}</td>
+                                    <td>
+                                        <form action="{%url 'hapus_keranjang' keran.id%}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="text" name="id" value="{{keran.barang.id}}" hidden>
+                                            <input type="text" name="status" value="Tersedia" hidden>
+                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <a href="{%url 'buat_pinjam'%}" button type="button"class="btn btn-primary btn-sm float-right"><i class="fa fa-plus"></i> Pinjam</button></a>
+                        </div>
+                    </div>
+                </div>
+            
+            <div class="card-body"></div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

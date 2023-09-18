@@ -1,0 +1,119 @@
+{% extends 'operator/base/base.html' %}
+
+{% block title %}List Karyawan{% endblock title %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row m-0">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li><a href="{%url 'index'%}">Dashboard</a></li>
+                            <li><a href="{%url 'pegawai_op' %}">Pegawai</a></li>
+                            <li class="active">Detail</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if messages %}
+{%for message in messages%}
+<div class="breadcrumbs">
+    <div class="alert alert-success" role="alert">
+        {{message}}
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock breadcrumbs %}
+
+
+
+{% block content %}
+
+<div class="col-md-4">
+    <aside class="profile-nav alt">
+        <section class="card">
+            <div class="card-header user-header alt bg-dark">
+                <div class="media">
+                    <a href="#">
+                        <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" src="{{ Pegawai.Foto.url }}">
+                    </a>
+                    <div class="media-body">
+                        <h2 class="text-light display-6">{{ Pegawai.nama }}</h2>
+                        {%if Pegawai.jabatan == '1'%}
+                        <p>Kepala Sekolah</p>
+                        {%elif Pegawai.jabatan == '2'%}
+                        <p>Wakabid Kurikulum</p>
+                        {%elif Pegawai.jabatan == '3'%}
+                        <p>Wakabid Sarana Prasarana</p>
+                        {%elif Pegawai.jabatan == '4'%}
+                        <p>Wakabid kesiswaan</p>
+                        {%elif Pegawai.jabatan == '5'%}
+                        <p>Kepala Tata Usaha</p>
+                        {%elif Pegawai.jabatan == '6'%}
+                        <p>Guru</p>
+                        {%elif Pegawai.jabatan == '7'%}
+                        <p>Tata Usaha</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                   <p>Nip : {{Pegawai.nip}}</p>
+                </li>
+                <li class="list-group-item">
+                    {% if Pegawai.pangkat == '1' %}
+                    <p>Pangkat : Pembina </p>
+                    {% elif Pegawai.pangkat == '2' %}
+                    <p>Pangkat : Pembina TK.I </p>
+                    {% elif Pegawai.pangkat == '3' %}
+                    <p>Pangkat : Penata TK.I </p>
+                    {% elif Pegawai.pangkat == '4' %}
+                    <p>Pangkat : Penata </p>
+                    {% elif Pegawai.pangkat == '5' %}
+                    <p>Pangkat : Penata Muda TK.I </p>
+                    {% elif Pegawai.pangkat == '6' %}
+                    <p>Pangkat : Penata Muda</p>
+                    {% endif %}
+                    
+                </li>
+                <li class="list-group-item">
+                    {% if Pegawai.golongan == '1' %}
+                    <p>Golongan : IV/a</p>
+                    {% elif Pegawai.golongan == '2' %}
+                    <p>Golongan :  IV/b</p>
+                    {% elif Pegawai.golongan == '3' %}
+                    <p>Golongan :  III/d</p>
+                    {% elif Pegawai.golongan == '4' %}
+                    <p>Golongan :  III/c</p>
+                    {% elif Pegawai.golongan == '5' %}
+                    <p>Golongan :  III/b</p>
+                    {% elif Pegawai.golongan == '6' %}
+                    <p>Golongan :  III/a</p>
+                    {% endif %}
+                    
+                </li>
+                <li class="list-group-item">
+                    <p>Tanggal terdaftar : {{Pegawai.tanggal_terdaftar}}</p>
+                </li>
+            </ul>
+
+        </section>
+    </aside>
+</div>
+{% endblock content %}

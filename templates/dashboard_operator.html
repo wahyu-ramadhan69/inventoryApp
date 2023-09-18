@@ -1,0 +1,143 @@
+{% extends 'operator/base/base.html' %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block content %}
+    <!-- Widgets  -->
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="stat-widget-five">
+                        <div class="stat-icon dib flat-color-1">
+                            <i class="fa fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="text-left dib">
+                                <div class="stat-text"><span class="count">{{total_pegawai}}</span></div>
+                                <div class="stat-heading">Pegawai</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="stat-widget-five">
+                        <div class="stat-icon dib flat-color-2">
+                            <i class="fa fa-cart-plus"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="text-left dib">
+                                <div class="stat-text"><span class="count">{{total_barang}}</span></div>
+                                <div class="stat-heading">Barang</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="stat-widget-five">
+                        <div class="stat-icon dib flat-color-3">
+                            <i class="pe-7s-cash"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="text-left dib">
+                                <div class="stat-text"><span class="count">{{total_peminjaman}}</span></div>
+                                <div class="stat-heading">Peminjaman</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <div class="stat-widget-five">
+                        <div class="stat-icon dib flat-color-4">
+                            <i class="fa fa-paper-plane"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="text-left dib">
+                                <div class="stat-text"><span class="count">{{total_pengembalian}}</span></div>
+                                <div class="stat-heading">Pengembalian</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Widgets -->
+    
+    <div class="clearfix"></div>
+
+    <!-- Orders -->
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="box-title">List Peminjaman Hari ini </h4>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card-body">
+                            <div class="table-stats order-table ov-h">
+                                <table class="table " id="pinjam">
+                                    <thead>
+                                        <tr>
+                                            <th class="serial">#</th>
+                                            <th >Nip peminjam</th>
+                                            <th>Nama barang</th>
+                                            <th>Tanggal pinjam</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for pinjam in semua_pinjam %}
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            <td><span class="name">{{ pinjam.pegawai.nip}}</span></td>
+                                            <td>{{ pinjam.barang.nama }}</td>
+                                            <td>{{ pinjam.tanggal_pinjam }}</td>
+                                            <td>
+                                                {% if pinjam.status_peminjaman == "Dikembalikan" %}
+                                                <span class="badge badge-complete">Sudah Di kembalikan</span>
+                                                {% elif pinjam.status_peminjaman == "Dipinjam" %}
+                                                <span class="badge badge-pending">Sedang Di pinjam</span>
+                                                {% elif pinjam.status_peminjaman == "Sekali pakai" %}
+                                                <span class="badge badge-secondary">Barang sekali pakai</span>
+                                                {% else %}
+                                                <span class="badge badge-dark">Tidak DI Ketahui</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                            <div class="card-body">
+                                <canvas id="pieChart"></canvas>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+{% endblock content %}
+

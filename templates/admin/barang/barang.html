@@ -1,0 +1,158 @@
+{% extends 'admin/base/base.html' %}
+
+{% block title %}List Barang{% endblock title %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row m-0">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Barang</a></li>
+                            <li class="active">List</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if messages %}
+{%for message in messages%}
+<div class="breadcrumbs">
+    <div class="alert alert-success" role="alert">
+        {{message}}
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+
+{% endblock breadcrumbs %}
+
+
+
+{% block content %}
+<div class="card-body">
+    <form action="{%url 'cetak_barang'%}" method="GET" target='_blank' enctype="multipart/form-data">
+        <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-print"></i> Cetak</button>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="box-title">List barang</h4>
+            </div>
+            <div class="card-body--">
+                <div class="table-stats order-table ov-h">
+                    <table class="table " id="coba">
+                        <thead>
+                            <tr>
+                                <th class="serial">No</th>
+                                <th>Kode barang</th>
+                                <th>Foto</th>
+                                <th>Nama</th>
+                                <th>Merk</th>
+                                <th>Jenis</th>
+                                <th>Status</th>
+                                <th>Keterangan</th>
+                                <th class="serial">#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for barang in semua_barang %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{barang.kode}}</td>
+                                <td><img src="{{ barang.Foto.url }}" width="60px" height="60px"></td>
+                                <td>{{ barang.nama }}</td>
+                                <td>{{barang.merk}}</td>
+                                <td>{{ barang.jenis }}</td>
+                                <td>
+                                    {% if barang.status == 'Dipinjam' %}
+                                    <span class="badge badge-dark">Dipinjam</span>
+                                    {% elif barang.status == 'habis' %}
+                                    <span class="badge badge-dark">Habis</span>
+                                    {% else %}
+                                    <span class="badge badge-info">Tersedia</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ barang.keterangan }}</td>
+                                <td>
+                                    {% if barang.status == 'Tersedia' %}
+                                    <a href="" button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#staticModal{{barang.id}}"><i class="fa fa-info-circle" aria-hidden="true"></i></button></a>
+                                    {% else %}
+                                    <a href="" button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#staticModal{{barang.id}}"><i class="fa fa-info-circle" aria-hidden="true"></i></button></a>
+                                    <a href="{%url 'd_barang' barang.id %}" button type="button" class="btn btn-secondary btn-sm"><i class="fa fa-eye" aria-hidden="true"></i></button></a>
+                                    {%endif%}
+                                </td>
+                                <div class="modal fade" id="staticModal{{barang.id}}" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticModalLabel">Detail Barang</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <aside class="profile-nav alt">
+                                                    <section class="card">
+                                                        <div class="card-header user-header alt bg-dark">
+                                                            <div class="media">
+                                                                <a href="#">
+                                                                    <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" src="{{ barang.Foto.url }}">
+                                                                </a>
+                                                                <div class="media-body">
+                                                                    <h2 class="text-light display-6">{{ barang.nama }}</h2>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <ul class="list-group list-group-flush">
+                                                            <li class="list-group-item">
+                                                               <p>Merk : {{barang.merk}}</p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <p>Status : {{barang.status}} </p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <p>Jenis : {{barang.jenis}} </p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <p>Keterangan : {{barang.keterangan}}<p>
+                                                            </li>
+                                                        </ul>
+                                            
+                                                    </section>
+                                                </aside>
+                                           </div>
+                                           <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div> <!-- /.table-stats -->
+            </div>
+        </div> <!-- /.card -->
+    </div>  <!-- /.col-lg-8 -->
+
+    
+</div>
+{% endblock content %}

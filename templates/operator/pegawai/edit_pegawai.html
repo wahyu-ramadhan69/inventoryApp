@@ -1,0 +1,83 @@
+{% extends 'operator/base/base.html' %}
+
+{% block title %}Ubah pegawai{% endblock title %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <strong class="card-title">Ubah pegawai</strong>
+            </div>
+            <div class="card-body">
+                <!-- Credit Card -->
+                    <div class="card-body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="nama" class="control-label mb-1">Nama Karyawan</label>
+                                <input type="text" class="form-control" name="nama" id="nama" value ="{{Pegawai.nama}}" autocomplete="off" >
+                            </div>
+                            <div class="form-group">
+                                <label for="jenis" class="control-label mb-1">NIP</label>
+                                <input type="text" class="form-control" name="nip" id="nip" value="{{Pegawai.nip}}" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="jumlah" class="control-label mb-1">Pangkat</label>
+                                <select name="pangkat" id="pangkat" class="form-control">
+                                    <option value="{{Pegawai.pangkat}}">--Pilih Pangkat--</option>
+                                    <option value="Pembina">Pembina</option>
+                                    <option value="Pembina TK.I">Pembina TK.I</option>
+                                    <option value="Penata TK.I">Penata TK.I</option>
+                                    <option value="Penata">Penata </option>
+                                    <option value="Penata Muda TK.I">Penata Muda TK.I</option>
+                                    <option value="Penata Muda">Penata Muda</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="jumlah" class="control-label mb-1">Golongan</label>
+                                <select name="golongan" id="golongan" class="form-control">
+                                    <option value="{{Pegawai.golongan}}">--Pilih Golongan--</option>
+                                    <option value="IV/a">IV/a</option>
+                                    <option value="IV/b">IV/b</option>
+                                    <option value="III/a">III/a</option>
+                                    <option value="III/b">III/b</option>
+                                    <option value="III/c">III/c</option>
+                                    <option value="III/d">III/d</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="jumlah" class="control-label mb-1">Jabatan</label>
+                                <select name="jabatan" id="jabatan" class="form-control">
+                                    <option value="{{Pegawai.jabatan}}">--Pilih Jabatan--</option>
+                                    <option value="Fungsional Guru">Fungsional Guru</option>
+                                    <option value="Fungsional Umum">Fungsional Umum</option>
+                                    <option value="Kepala sekolah">Kepala sekolah</option>
+                                    <option value="Wakabid Kurikulum">Wakabid Kurikulum</option>
+                                    <option value="Wakabid humas">Wakabid humas</option>
+                                    <option value="Wakabid Sarana Prasarana">Wakabid Sarana Prasarana</option>
+                                    <option value="Wakabid kesiswaan">Wakabid kesiswaan</option>
+                                    <option value="Kepala Tata Usaha">Kepala Tata Usaha</option>
+                                </select>
+                            </div>
+
+                            
+                            <div class class="form-group">
+                                <label for="Foto" class="control-label mb-1">Upload Foto</label></div>
+                                <input type="file" id="Foto" name="Foto" class="form-control-file" value="Pegawai.Foto">
+                            </div>
+                            <div>
+                                <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
+                                    <span id="payment-button-amount">Simpan</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+            </div>
+        </div> <!-- .card -->
+
+    </div><!--/.col-->
+</div>
+{% endblock content %}

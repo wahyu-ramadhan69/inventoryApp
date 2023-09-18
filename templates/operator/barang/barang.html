@@ -1,0 +1,305 @@
+{% extends 'operator/base/base.html' %}
+
+{% block title %}List Barang{% endblock title %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <div class="breadcrumbs-inner">
+        <div class="row m-0">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Barang</a></li>
+                            <li class="active">List</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% if messages %}
+{%for message in messages%}
+<div class="breadcrumbs">
+    <div class="alert alert-success" role="alert">
+        {{message}}
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+
+{% endblock breadcrumbs %}
+
+
+
+{% block content %}
+<div class="card-body">
+<a href="{%url 'c_barang'%}" target='_blank'  class="btn btn-outline-secondary"><iclass="fa fa-print"></iclass=>Cetak</a>
+<a class="btn btn-info" data-toggle="modal" data-target="#tambah" role="button" style="color: aliceblue;">Tambah</a>
+</div>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="box-title">List barang</h4>
+            </div>
+            <div class="card-body--">
+                <div class="table-stats order-table ov-h">
+                    <table class="table " id="coba">
+                        <thead>
+                            <tr>
+                                <th class="serial">No</th>
+                                <th>Kode barang</th>
+                                <th>Foto</th>
+                                <th>Nama</th>
+                                <th>Merk</th>
+                                <th>Status</th>
+                                <th>Keterangan</th>
+                                <th class="serial">#</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for barang in semua_barang %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{barang.kode}}</td>
+                                <td><img src="{{ barang.Foto.url }}" width="60px" height="60px"></td>
+                                <td>{{ barang.nama }}</td>
+                                <td>
+                                    {% if barang.merk == null %}
+                                    -
+                                    {% else %}
+                                    {{barang.merk}}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if barang.status == 'Dipinjam' %}
+                                    <span class="badge badge-dark">Dipinjam</span>
+                                    {% elif barang.status == 'habis' %}
+                                    <span class="badge badge-dark">Habis</span>
+                                    {% else %}
+                                    <span class="badge badge-info">Tersedia</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if barang.keterangan == null %}
+                                    -
+                                    {% else %}
+                                    {{barang.keterangan}}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="" button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#staticModal{{barang.id}}"><i class="fa fa-info-circle" aria-hidden="true"></i></button></a>
+                                    <a href="" button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#tesModal{{barang.id}}"><i class="fa fa-edit"></i></button></a>
+                                    <a href="" button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cobaModal{{barang.id}}"><i class="fa fa-trash"></i></button></a>
+
+                                    <div class="modal fade" id="cobaModal{{barang.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <form action="{% url 'hapus_barang' barang.id %}" method="POST">
+                                                {% csrf_token %}
+                                            <div class="modal-body">
+                                                <h5 style="text-align:center; font-size:20px;" > Apakah anda yakin ingin menghapus data ini ?</h5>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn" data-dismiss="modal">Batal</button>
+                                              <button type="submit" class="btn btn-danger">Hapus</button>
+                                            </div>
+                                            </form>
+                                          </div>
+                                        </div>
+                                      </div>
+                                </td>
+
+                                <div class="modal fade" id="staticModal{{barang.id}}" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="staticModalLabel">Detail Barang</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <aside class="profile-nav alt">
+                                                    <section class="card">
+                                                        <div class="card-header user-header alt bg-dark">
+                                                            <div class="media">
+                                                                <a href="#">
+                                                                    <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" src="{{ barang.Foto.url }}">
+                                                                </a>
+                                                                <div class="media-body">
+                                                                    <h2 class="text-light display-6">{{ barang.nama }}</h2>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <ul class="list-group list-group-flush">
+                                                            <li class="list-group-item">
+                                                               <p>Merk : {{barang.merk}}</p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <p>Status : {{barang.status}} </p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <p>Jenis : {{barang.jenis}} </p>
+                                                            </li>
+                                                            <li class="list-group-item">
+                                                                <p>Keterangan : {{barang.keterangan}}<p>
+                                                            </li>
+                                                        </ul>
+                                            
+                                                    </section>
+                                                </aside>
+                                           </div>
+                                           <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </tr>
+                            <div class="modal fade" id="tesModal{{barang.id}}" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticModalLabel">Edit Barang</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <aside class="profile-nav alt">
+                                                <section class="card">
+                                                    <div class="card-body">
+                                                        <!-- Credit Card -->
+                                                            <div class="card-body">
+                                                                <form action="{% url 'edit_barang' barang.id %}" method="post" enctype="multipart/form-data">
+                                                                    {% csrf_token %}
+                                                                    <input type="text" class="form-control" name="kode" value="{{barang.kode}}" hidden>
+                                                                    <div class="form-group">
+                                                                        <label for="nama" class="control-label mb-1">nama barang</label>
+                                                                        <input type="text" class="form-control" name="nama" id="nama" value="{{barang.nama}}" >
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="nama" class="control-label mb-1">merk barang</label>
+                                                                        <input type="text" class="form-control" name="merk" id="merk" value="{{barang.merk}}" >
+                                                                    </div>
+                                                                    <!-- <div class="form-group">
+                                                                        <label for="jumlah" class="control-label mb-1">Pilih Jenis Barang</label>
+                                                                        <input type="int" class="form-control" name="jenis" id="jenis" value="{{barang.jenis}}">
+                                                                    </div> -->
+                                                                    <!-- <div class="form-group">
+                                                                        <label for="jumlah" class="control-label mb-1">Satuan barang</label>
+                                                                        <input type="int" class="form-control" name="satuan" id="satuan" value="{{barang.satuan}}">
+                                                                    </div> -->
+                                                                    <div class="form-group">
+                                                                        <label for="keterangan" class="control-label mb-1">keterangan barang</label>
+                                                                        <textarea name="keterangan" id="keterangan" name="keterangan" rows="3" class="form-control">{{barang.keterangan}}</textarea>
+                                                                    </div>
+                                                                    <div class class="form-group">
+                                                                        <label for="Foto" class="control-label mb-1">Upload Foto barang</label></div>
+                                                                        <input type="file" id="Foto" name="Foto" class="form-control-file" value="{{barang.Foto}}">
+                                                                    </div>
+                                                                    <div>
+                                                                        <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
+                                                                            <span id="payment-button-amount">Simpan</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                        
+                                                    </div>
+                                                </section>
+                                            </aside>
+                                       </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div> <!-- /.table-stats -->
+            </div>
+        </div> <!-- /.card -->
+    </div>  <!-- /.col-lg-8 -->
+</div>
+
+<div class="modal fade" id="tambah" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Tambah Barang</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form method="post" action="{% url 'tambah_barang'%}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" class="form-control" name="kode" value="{{kode}}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="nama" class="control-label mb-1">nama barang *</label>
+                    <input type="text" class="form-control" name="nama" id="nama" autocomplete="off" required>
+                </div>
+                <div class="form-group">
+                    <label for="nama" class="control-label mb-1">merk barang</label>
+                    <input type="text" class="form-control" name="merk" id="merk" value="-" autocomplete="off">
+                </div>
+                <!-- <div class="form-group">
+                    <label for="jumlah" class="control-label mb-1">Pilih Jenis Barang *</label>
+                    <select name="jenis" id="jenis" class="form-control" required>
+                        <option value="">--Pilih jenis barang--</option>
+                        {% for jenis in jenis %}
+                        <option value="{{jenis.nama}}">{{jenis.nama}}</option>
+                        {% endfor %}
+                    </select>
+                    {% for err in form.jenis.errors %}
+                        <small class="text-danger">{{err}}</small>
+                    {% endfor %}
+                </div> -->
+                <!-- <div class="form-group">
+                    <label for="jumlah" class="control-label mb-1">Satuan barang *</label>
+                    <select name="satuan" id="satuan" class="form-control" required>
+                        <option value="">--Pilih satuan barang--</option>
+                        <option value="buah">buah</option>
+                        <option value="lusin">lusin</option>
+                        <option value="tube">tube</option>
+                    </select>
+                    {% for err in form.satuan.errors %}
+                        <small class="text-danger">{{err}}</small>
+                    {% endfor %}
+                </div> -->
+                <div class="form-group">
+                    <label for="keterangan" class="control-label mb-1">keterangan barang</label>
+                    <textarea name="keterangan" id="keterangan" rows="4" class="form-control">-</textarea>
+                </div>
+                <div class class="form-group">
+                    <label for="Foto" class="control-label mb-1">Upload Foto barang</label></div>
+                    <input type="file" id="Foto" name="Foto" class="form-control-file">
+                </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Simpan</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

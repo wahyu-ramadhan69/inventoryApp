@@ -1,0 +1,116 @@
+{% extends 'operator/base/base.html' %}
+
+{% block title %}Create Buyer{% endblock title %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <strong class="card-title">Masukkan Kode Peminjam</strong>
+            </div>
+            <div class="card-body">
+                    <div class="card-body">
+                        <div class="search-box">
+                            <form action="{%url 'pengembalian'%}" method="GET">
+                                <div class="search__container">
+                                    <input class="search__input" type="text" placeholder="Cari...." name="keyword" autocomplete="off">
+                                    <button type="submit" hidden></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            </div>
+        </div> 
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="row">
+                <div class="col-lg-10">
+                    <div class="card-body">
+                        <div class="table-stats order-table ov-h">
+                            <table class="table" id="pinjam">
+                                <thead>
+                                    <tr>
+                                        <th class="serial">#</th>
+                                        <th>Nama Peminjam</th>
+                                        <th>Nip</th>
+                                        <th>Nama Barang</th>
+                                        <th>Tanggal peminjaman</th>
+                                        <th>#</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for pinjam in hasil %}
+                                    <tr>
+                                        <td>{{forloop.counter}}</td>
+                                        <td>{{ pinjam.pegawai.nama }}</td>
+                                        <td>{{ pinjam.pegawai.nip }}</td>
+                                        <td>{{ pinjam.barang.nama }}</td>
+                                        <td>{{ pinjam.tanggal_pinjam }}</td>
+                                        <td>
+                                            <!-- <form action="{% url 'pengembalian2' %}">
+                                                <input type="text" name="keyword" value="{{pinjam.kode_pinjam}}" hidden>
+                                                <button type="submit" class="btn btn-outline-primary"><i class="fa fa-undo"></i> Kembalikan Barang</button>
+                                            </form> -->
+                                            <button class="btn btn-outline-primary" data-toggle="modal" data-target="#staticModal{{pinjam.id}}"><i class="fa fa-undo"></i> Kembalikan Barang</button>
+                                        </td>
+                                    </tr>
+
+                                    <div class="modal fade" id="staticModal{{pinjam.id}}" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="staticModalLabel">Pengembalian Barang</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <aside class="profile-nav alt">
+                                                        <section class="card">
+                                                            <div class="card-body">
+                                                                <form action="{% url 'kembali_barang' pinjam.id %}" method="post" enctype="multipart/form-data">
+                                                                    {% csrf_token %}
+                                                                    <div class="form-group">
+                                                                        <input type="text" name="status"  value="tersedia" class="form-control" autocomplete="off" readonly>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <label for="keterangan" class="control-label mb-1">keterangan</label>
+                                                                        <textarea name="keterangan" id="keterangan" rows="4" class="form-control">-</textarea>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <input type="text" name="status_peminjaman"  value="Dikembalikan" class="form-control" autocomplete="off" readonly>
+                                                                    </div>
+                                                                    <div class="form-group">
+                                                                        <input type="text" class="form-control" name="peminjaman_barang" id="id_barang" value="{{pinjam.id}}" readonly>
+                                                                    </div>
+                                                                    <div>
+                                                                        <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
+                                                                            <span id="payment-button-amount"><i class="fa fa-undo"></i> Kembalikan</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </section>
+                                                    </aside>
+                                                </div>
+                                        </div>
+                                    </div>
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- /.row -->
+            <div class="card-body"></div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
